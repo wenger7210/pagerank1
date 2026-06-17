@@ -5,180 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>실시간 다중 좋아요 갤러리 & 소시오메트리</title>
     <style>
-        body {
-            font-family: 'Malgun Gothic', sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 950px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        h1, h2 {
-            color: #333;
-            text-align: center;
-        }
-
-        .hidden {
-            display: none;
-        }
-
+        body { font-family: 'Malgun Gothic', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 950px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1, h2 { color: #333; text-align: center; }
+        .hidden { display: none; }
+        
         /* 로그인 */
-        #login-section {
-            text-align: center;
-            padding: 50px 0;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            width: 200px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-right: 5px;
-        }
-
-        button {
-            padding: 10px 15px;
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
+        #login-section { text-align: center; padding: 50px 0; }
+        input[type="text"] { padding: 10px; width: 200px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; margin-right: 5px; }
+        button { padding: 10px 15px; border: none; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        button:hover { background-color: #45a049; }
+        
         /* 업로드 영역 */
-        .upload-area {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #eef2f3;
-            border-radius: 8px;
-        }
-
-        .upload-area input[type="file"] {
-            padding: 10px;
-            background: white;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            max-width: 80%;
-        }
-
+        .upload-area { text-align: center; margin-bottom: 30px; padding: 20px; background: #eef2f3; border-radius: 8px; }
+        .upload-area input[type="file"] { padding: 10px; background: white; border-radius: 5px; border: 1px solid #ddd; max-width: 80%; }
+        
         /* 갤러리 */
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
-
-        .card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            width: 210px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .card img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 5px;
-            background-color: #eee;
-        }
-
-        .card h3 {
-            margin: 10px 0 5px 0;
-            font-size: 18px;
-        }
-
+        .gallery { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 40px; }
+        .card { background: white; border: 1px solid #ddd; border-radius: 10px; padding: 15px; width: 210px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; background-color: #eee; }
+        .card h3 { margin: 10px 0 5px 0; font-size: 18px; }
+        
         /* 버튼 스타일 */
-        .btn-group {
-            display: flex;
-            gap: 5px;
-            margin-top: 10px;
-        }
-
-        .like-btn {
-            background-color: #ff4757;
-            flex: 1;
-            padding: 8px 0;
-            font-size: 14px;
-            border-radius: 5px;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
-
-        .like-btn:hover {
-            background-color: #ff6b81;
-        }
-
-        .unlike-btn {
-            background-color: #a4b0be;
-            flex: 1;
-            padding: 8px 0;
-            font-size: 14px;
-            border-radius: 5px;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
-
-        .unlike-btn:hover {
-            background-color: #ced6e0;
-        }
-
+        .btn-group { display: flex; gap: 5px; margin-top: 10px; }
+        .like-btn { background-color: #ff4757; flex: 1; padding: 8px 0; font-size: 14px; border-radius: 5px; border: none; color: white; cursor: pointer; }
+        .like-btn:hover { background-color: #ff6b81; }
+        .unlike-btn { background-color: #a4b0be; flex: 1; padding: 8px 0; font-size: 14px; border-radius: 5px; border: none; color: white; cursor: pointer; }
+        .unlike-btn:hover { background-color: #ced6e0; }
+        
         /* 행렬 데이터 표 */
-        #matrix-section {
-            margin-top: 40px;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-
-        th {
-            background-color: #f1f2f6;
-        }
-
-        .highlight {
-            background-color: #ffeaa7;
-            font-weight: bold;
-            color: #ff4757;
-        }
-
-        .self-cell {
-            background-color: #eee;
-            color: #999;
-        }
+        #matrix-section { margin-top: 40px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: center; margin-top: 10px; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; }
+        th { background-color: #f1f2f6; }
+        .highlight { background-color: #ffeaa7; font-weight: bold; color: #ff4757; }
+        .self-cell { background-color: #eee; color: #999; }
     </style>
 </head>
 <body>
@@ -196,7 +57,6 @@
             <h1 id="welcome-msg" style="margin: 0; font-size: 24px;"></h1>
             <button id="logout-btn" style="background-color: #747d8c;">로그아웃</button>
         </div>
-
         <hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0;">
 
         <div class="upload-area">
@@ -211,7 +71,7 @@
         <div class="gallery" id="gallery-container"></div>
 
         <div id="matrix-section">
-            <h2>📊 실시간 좋아요 빈도 행렬 (Sociomatrix)</h2>
+            <h2>📊 실시간 좋아요 빈도 행렬 (행: 받은 사람, 열: 보낸 사람)</h2>
             <div id="matrix-container"></div>
         </div>
     </div>
@@ -219,34 +79,24 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import {
-        getFirestore,
-        doc,
-        setDoc,
-        getDoc,
-        onSnapshot,
-        updateDoc,
-        collection,
-        deleteDoc,
-        getDocs,
-        increment
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, collection, deleteDoc, getDocs, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // 🔥 [필수] 본인의 Firebase 프로젝트 설정 값으로 반드시 변경하세요!
+    // 선생님의 고유 프로젝트 설정값 100% 반영
     const firebaseConfig = {
-  apiKey: "AIzaSyBMUuFpTgLzGtl4ILPBZIV5jpJDJzod1zI",
-  authDomain: "pagerank2-ef00f.firebaseapp.com",
-  projectId: "pagerank2-ef00f",
-  storageBucket: "pagerank2-ef00f.firebasestorage.app",
-  messagingSenderId: "235378063628",
-  appId: "1:235378063628:web:02980c1335f0a9d9903129"
+  apiKey: "AIzaSyCYOwavpYZOTPVurTQ-oDPhTkXpoQ95kA8",
+  authDomain: "pagerank1-5c309.firebaseapp.com",
+  projectId: "pagerank1-5c309",
+  storageBucket: "pagerank1-5c309.firebasestorage.app",
+  messagingSenderId: "613990481418",
+  appId: "1:613990481418:web:20e97676f1a297cbaf69f3",
+  measurementId: "G-VN5VJ7GJK0"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
     let currentUser = null;
-    let localAppData = {};
+    let localAppData = {}; 
 
     const loginSection = document.getElementById('login-section');
     const appSection = document.getElementById('app-section');
@@ -254,13 +104,12 @@
     const welcomeMsg = document.getElementById('welcome-msg');
     const fileInput = document.getElementById('image-file');
 
-    // 로그인
+    // 로그인 (이전 버전의 안정적인 변수 참조 구조 복원)
     async function login() {
         const name = nicknameInput.value.trim();
         if (!name) return alert("닉네임을 입력해주세요!");
-
+        
         currentUser = name;
-
         const userRef = doc(db, "students", currentUser);
         const userSnap = await getDoc(userRef);
 
@@ -268,7 +117,7 @@
             await setDoc(userRef, {
                 nickname: currentUser,
                 image: "",
-                likes: {}
+                likes: {} 
             });
         }
 
@@ -283,11 +132,9 @@
     function startRealtimeListener() {
         onSnapshot(collection(db, "students"), (querySnapshot) => {
             localAppData = {};
-
             querySnapshot.forEach((doc) => {
                 localAppData[doc.id] = doc.data();
             });
-
             updateUI();
         });
     }
@@ -304,12 +151,9 @@
         resizeImage(file, async (base64Str) => {
             try {
                 const userRef = doc(db, "students", currentUser);
-                await updateDoc(userRef, {
-                    image: base64Str
-                });
-
+                await updateDoc(userRef, { image: base64Str });
                 alert("그림이 성공적으로 등록되었습니다!");
-                fileInput.value = "";
+                fileInput.value = ""; 
             } catch (err) {
                 console.error(err);
                 alert("업로드에 실패했습니다. 파일 용량이 너무 크거나 네트워크 에러입니다.");
@@ -320,26 +164,21 @@
         });
     }
 
-    // 스마트폰 안에서 이미지를 가로 500px 크기로 압축하는 함수
+    // 스마트폰 안에서 이미지 다이어트(압축) 시키는 함수
     function resizeImage(file, callback) {
         const reader = new FileReader();
-
         reader.onload = function (e) {
             const img = new Image();
-
             img.onload = function () {
                 const canvas = document.createElement('canvas');
-
                 let width = img.width;
                 let height = img.height;
 
                 const MAX_WIDTH = 500;
-
                 if (width > MAX_WIDTH) {
                     height *= MAX_WIDTH / width;
                     width = MAX_WIDTH;
                 }
-
                 canvas.width = width;
                 canvas.height = height;
 
@@ -349,28 +188,21 @@
                 const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
                 callback(dataUrl);
             };
-
             img.src = e.target.result;
         };
-
         reader.readAsDataURL(file);
     }
 
     // 내 그림 삭제
     async function deleteMyImage() {
         if (!confirm("등록하신 그림을 삭제하시겠습니까?")) return;
-
         const userRef = doc(db, "students", currentUser);
-        await updateDoc(userRef, {
-            image: ""
-        });
+        await updateDoc(userRef, { image: "" });
     }
 
     // 좋아요 증가 (+1)
     async function addLike(targetUser) {
-        if (targetUser === currentUser) {
-            return alert("자신의 작품에는 좋아요를 누를 수 없습니다!");
-        }
+        if (targetUser === currentUser) return alert("자신의 작품에는 좋아요를 누를 수 없습니다!");
 
         const targetData = localAppData[targetUser];
         const myCount = (targetData.likes && targetData.likes[currentUser]) || 0;
@@ -381,7 +213,6 @@
         }
 
         const targetRef = doc(db, "students", targetUser);
-
         await updateDoc(targetRef, {
             [`likes.${currentUser}`]: increment(1)
         });
@@ -400,169 +231,3 @@
         }
 
         const targetRef = doc(db, "students", targetUser);
-
-        await updateDoc(targetRef, {
-            [`likes.${currentUser}`]: increment(-1)
-        });
-    }
-
-    // 전체 데이터 초기화
-    async function resetAllData() {
-        const password = prompt("초기화 비밀번호를 입력하세요. (기본: 1234)");
-        if (password !== "1234") return alert("비밀번호가 틀렸습니다.");
-
-        if (!confirm("모든 학생 데이터와 하트 기록을 삭제하시겠습니까?")) return;
-
-        const querySnapshot = await getDocs(collection(db, "students"));
-        const deletePromises = [];
-
-        querySnapshot.forEach((doc) => {
-            deletePromises.push(deleteDoc(doc.ref));
-        });
-
-        await Promise.all(deletePromises);
-
-        alert("초기화되었습니다.");
-    }
-
-    function logout() {
-        currentUser = null;
-        nicknameInput.value = "";
-
-        loginSection.classList.remove('hidden');
-        appSection.classList.add('hidden');
-    }
-
-    function updateUI() {
-        renderGallery();
-        renderMatrix();
-    }
-
-    // 갤러리 렌더링
-    function renderGallery() {
-        const container = document.getElementById('gallery-container');
-        container.innerHTML = "";
-
-        for (const [user, data] of Object.entries(localAppData)) {
-            if (!data.image) continue;
-
-            const likesMap = data.likes || {};
-            const totalLikes = Object.values(likesMap).reduce((a, b) => a + b, 0);
-            const myCount = likesMap[currentUser] || 0;
-
-            const card = document.createElement('div');
-            card.className = 'card';
-
-            const gaugeText = myCount >= 5
-                ? "🔥 풀 하트 완료!"
-                : `(${myCount} / 5개 보냄)`;
-
-            card.innerHTML = `
-                <img src="${data.image}" alt="${user}의 그림" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
-                <h3>${user}</h3>
-                <p style="font-size:13px; color:#222; margin:5px 0;">
-                    ❤️ 총 하트: <strong>${totalLikes}</strong>개
-                </p>
-                <p style="font-size:11px; color:${myCount >= 5 ? '#ff4757' : '#666'}; margin:0 0 10px 0; font-weight:${myCount >= 5 ? 'bold' : 'normal'};">
-                    ${gaugeText}
-                </p>
-                <div class="btn-group">
-                    <button class="like-btn" id="like-${user}">❤️ 좋아요</button>
-                    <button class="unlike-btn" id="unlike-${user}">💔 취소</button>
-                </div>
-            `;
-
-            container.appendChild(card);
-
-            document.getElementById(`like-${user}`).addEventListener('click', () => addLike(user));
-            document.getElementById(`unlike-${user}`).addEventListener('click', () => removeLike(user));
-        }
-    }
-
-    // 소시오메트리 행렬 렌더링
-    // 변경 전: 행 = 보낸 사람, 열 = 받은 사람
-    // 변경 후: 행 = 받은 사람, 열 = 보낸 사람
-    function renderMatrix() {
-        const container = document.getElementById('matrix-container');
-        const users = Object.keys(localAppData).sort();
-
-        if (users.length === 0) {
-            container.innerHTML = "<p style='text-align:center; color:#999;'>참여 중인 학생이 없습니다.</p>";
-            return;
-        }
-
-        let tableHTML = "<table>";
-
-        // 첫 행: 열 제목은 '보낸 사람'
-        tableHTML += "<tr>";
-        tableHTML += "<th>받은 사람 (Row) \\ 보낸 사람 (Col)</th>";
-
-        users.forEach(sender => {
-            tableHTML += `<th>${sender}</th>`;
-        });
-
-        tableHTML += "<th>받은 총 하트</th>";
-        tableHTML += "</tr>";
-
-        // 각 행: 받은 사람 기준
-        users.forEach(receiver => {
-            tableHTML += `<tr>`;
-            tableHTML += `<th>${receiver}</th>`;
-
-            const receiverLikes = localAppData[receiver].likes || {};
-            let receivedTotal = 0;
-
-            // 각 열: 보낸 사람 기준
-            users.forEach(sender => {
-                if (sender === receiver) {
-                    tableHTML += `<td class="self-cell">-</td>`;
-                } else {
-                    const count = receiverLikes[sender] || 0;
-                    receivedTotal += count;
-
-                    tableHTML += `<td class="${count > 0 ? 'highlight' : ''}">${count}</td>`;
-                }
-            });
-
-            tableHTML += `<td><strong>${receivedTotal}</strong></td>`;
-            tableHTML += `</tr>`;
-        });
-
-        // 마지막 행: 보낸 사람별 총 하트
-        tableHTML += "<tr>";
-        tableHTML += "<th>보낸 총 하트</th>";
-
-        users.forEach(sender => {
-            let sentTotal = 0;
-
-            users.forEach(receiver => {
-                if (sender === receiver) return;
-
-                const receiverLikes = localAppData[receiver].likes || {};
-                sentTotal += receiverLikes[sender] || 0;
-            });
-
-            tableHTML += `<td><strong>${sentTotal}</strong></td>`;
-        });
-
-        tableHTML += "<td class='self-cell'></td>";
-        tableHTML += "</tr>";
-
-        tableHTML += "</table>";
-
-        container.innerHTML = tableHTML;
-    }
-
-    document.getElementById('login-btn').addEventListener('click', login);
-    document.getElementById('upload-btn').addEventListener('click', uploadImage);
-    document.getElementById('delete-btn').addEventListener('click', deleteMyImage);
-    document.getElementById('reset-all-btn').addEventListener('click', resetAllData);
-    document.getElementById('logout-btn').addEventListener('click', logout);
-
-    nicknameInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') login();
-    });
-</script>
-
-</body>
-</html>
