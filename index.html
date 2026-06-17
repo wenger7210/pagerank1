@@ -9,28 +9,21 @@
         .container { max-width: 950px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h1, h2 { color: #333; text-align: center; }
         .hidden { display: none; }
-        
-        /* 로그인/업로드/갤러리 스타일 */
         #login-section { text-align: center; padding: 50px 0; }
         input[type="text"] { padding: 10px; width: 200px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; margin-right: 5px; }
-        button { padding: 10px 15px; border: none; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        button:hover { background-color: #45a049; }
+        button { padding: 10px 15px; border: none; background-color: #4CAF50; color: white; border-radius: 5px; cursor: pointer; font-size: 16px; }
         .upload-area { text-align: center; margin-bottom: 30px; padding: 20px; background: #eef2f3; border-radius: 8px; }
-        .upload-area input[type="file"] { padding: 10px; background: white; border-radius: 5px; border: 1px solid #ddd; max-width: 80%; }
-        .gallery { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 40px; }
-        .card { background: white; border: 1px solid #ddd; border-radius: 10px; padding: 15px; width: 210px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; background-color: #eee; }
+        .gallery { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .card { background: white; border: 1px solid #ddd; border-radius: 10px; padding: 15px; width: 210px; text-align: center; }
+        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; background: #eee; }
         .btn-group { display: flex; gap: 5px; margin-top: 10px; }
-        .like-btn { background-color: #ff4757; flex: 1; padding: 8px 0; font-size: 14px; border-radius: 5px; border: none; color: white; cursor: pointer; }
-        .unlike-btn { background-color: #a4b0be; flex: 1; padding: 8px 0; font-size: 14px; border-radius: 5px; border: none; color: white; cursor: pointer; }
-        
-        /* 행렬 표 스타일 */
-        #matrix-section { margin-top: 40px; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: center; margin-top: 10px; font-size: 14px; }
-        th, td { border: 1px solid #ddd; padding: 10px; }
+        .like-btn { background-color: #ff4757; color: white; border: none; padding: 8px; flex: 1; border-radius: 5px; }
+        .unlike-btn { background-color: #a4b0be; color: white; border: none; padding: 8px; flex: 1; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: center; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
         th { background-color: #f1f2f6; }
-        .highlight { background-color: #ffeaa7; font-weight: bold; color: #ff4757; }
-        .self-cell { background-color: #eee; color: #999; }
+        .highlight { background-color: #ffeaa7; font-weight: bold; }
+        .self-cell { background-color: #eee; }
     </style>
 </head>
 <body>
@@ -38,41 +31,28 @@
 <div class="container">
     <div id="login-section">
         <h1>👋 실시간 다중 갤러리</h1>
-        <p>닉네임 입력 후 입장하세요. (한 친구당 하트 5개 제한)</p>
         <input type="text" id="nickname-input" placeholder="닉네임 입력">
         <button id="login-btn">입장하기</button>
     </div>
 
     <div id="app-section" class="hidden">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1 id="welcome-msg" style="margin: 0; font-size: 24px;"></h1>
-            <button id="logout-btn" style="background-color: #747d8c;">로그아웃</button>
-        </div>
-        <hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0;">
-
+        <h1 id="welcome-msg"></h1>
         <div class="upload-area">
-            <h3>🖼️ 내 그림 등록하기</h3>
             <input type="file" id="image-file" accept="image/*">
             <button id="upload-btn">사진 등록</button>
-            <button id="delete-btn" style="background-color: #e17055;">내 그림 삭제</button>
-            <button id="reset-all-btn" style="background-color: #d63031; font-size: 11px;">⚠️ 전체 초기화</button>
+            <button id="delete-btn">삭제</button>
         </div>
-
-        <h2>🎨 친구들의 작품 갤러리</h2>
+        <h2>🎨 친구들의 작품</h2>
         <div class="gallery" id="gallery-container"></div>
-
-        <div id="matrix-section">
-            <h2>📊 좋아요 빈도 행렬 (받은 사람 기준)</h2>
-            <div id="matrix-container"></div>
-        </div>
+        <h2>📊 소시오메트리 (행:받은사람, 열:보낸사람)</h2>
+        <div id="matrix-container"></div>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, collection, deleteDoc, getDocs, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, collection, increment, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // [본인의 설정값으로 수정하세요!]
     const firebaseConfig = {
   apiKey: "AIzaSyBMUuFpTgLzGtl4ILPBZIV5jpJDJzod1zI",
   authDomain: "pagerank2-ef00f.firebaseapp.com",
@@ -83,81 +63,73 @@
   measurementId: "G-045RQXJ0FT"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
+    const db = getFirestore(initializeApp(firebaseConfig));
     let currentUser = null;
-    let localAppData = {}; 
-    const fileInput = document.getElementById('image-file');
+    let localAppData = {};
 
     async function login() {
         const name = document.getElementById('nickname-input').value.trim();
-        if (!name) return alert("닉네임을 입력하세요!");
+        if (!name) return;
         currentUser = name;
-        const userRef = doc(db, "students", currentUser);
-        const userSnap = await getDoc(userRef);
-        if (!userSnap.exists()) await setDoc(userRef, { nickname: currentUser, image: "", likes: {} });
+        const ref = doc(db, "students", currentUser);
+        if (!(await getDoc(ref)).exists()) await setDoc(ref, { nickname: currentUser, image: "", likes: {} });
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('app-section').classList.remove('hidden');
-        document.getElementById('welcome-msg').innerText = `🙋‍♂️ 접속자: ${currentUser}`;
-        onSnapshot(collection(db, "students"), (snap) => {
+        document.getElementById('welcome-msg').innerText = `🙋‍♂️ ${currentUser}님 환영합니다!`;
+        onSnapshot(collection(db, "students"), snap => {
             localAppData = {};
-            snap.forEach(doc => localAppData[doc.id] = doc.data());
+            snap.forEach(d => localAppData[d.id] = d.data());
             updateUI();
         });
     }
 
-    async function uploadImage() {
-        const file = fileInput.files[0];
-        if (!file) return alert("파일을 선택하세요!");
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = new Image();
-            img.onload = async () => {
-                const canvas = document.createElement('canvas');
-                const MAX = 500;
-                let w = img.width, h = img.height;
-                if (w > MAX) { h *= MAX/w; w = MAX; }
-                canvas.width = w; canvas.height = h;
-                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                await updateDoc(doc(db, "students", currentUser), { image: canvas.toDataURL('image/jpeg', 0.7) });
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-
-    async function addLike(target) {
-        if (target === currentUser) return;
-        const myCount = (localAppData[target].likes && localAppData[target].likes[currentUser]) || 0;
-        if (myCount >= 5) return alert("최대 5개까지만 가능합니다!");
-        await updateDoc(doc(db, "students", target), { [`likes.${currentUser}`]: increment(1) });
-    }
-
-    async function removeLike(target) {
-        const myCount = (localAppData[target].likes && localAppData[target].likes[currentUser]) || 0;
-        if (myCount <= 0) return;
-        await updateDoc(doc(db, "students", target), { [`likes.${currentUser}`]: increment(-1) });
-    }
-
+    // 행/열 전환된 표 렌더링
     function renderMatrix() {
         const container = document.getElementById('matrix-container');
         const users = Object.keys(localAppData).sort();
         let html = "<table><tr><th>받은 사람 \\ 보낸 사람</th>";
         users.forEach(u => html += `<th>${u}</th>`);
-        html += "<th>받은 총합</th></tr>";
+        html += "<th>받은 합계</th></tr>";
+        
         users.forEach(receiver => {
             html += `<tr><th>${receiver}</th>`;
             let receiveCount = 0;
             users.forEach(sender => {
-                if (sender === receiver) html += `<td class='self-cell'>-</td>`;
+                if (sender === receiver) html += `<td class="self-cell">-</td>`;
                 else {
                     const count = (localAppData[receiver].likes || {})[sender] || 0;
                     receiveCount += count;
-                    html += `<td class='${count > 0 ? "highlight" : ""}'>${count}</td>`;
+                    html += `<td class="${count > 0 ? 'highlight' : ''}">${count}</td>`;
                 }
             });
             html += `<td><strong>${receiveCount}</strong></td></tr>`;
         });
         container.innerHTML = html;
     }
+
+    function updateUI() {
+        const cont = document.getElementById('gallery-container');
+        cont.innerHTML = "";
+        for (const [user, data] of Object.entries(localAppData)) {
+            if (!data.image) continue;
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `<img src="${data.image}"><h3>${user}</h3><div class='btn-group'><button class='like-btn' id='l-${user}'>❤️</button><button class='unlike-btn' id='u-${user}'>💔</button></div>`;
+            cont.appendChild(card);
+            document.getElementById(`l-${user}`).onclick = () => updateDoc(doc(db, "students", user), { [`likes.${currentUser}`]: increment(1) });
+            document.getElementById(`u-${user}`).onclick = () => updateDoc(doc(db, "students", user), { [`likes.${currentUser}`]: increment(-1) });
+        }
+        renderMatrix();
+    }
+
+    document.getElementById('login-btn').onclick = login;
+    document.getElementById('upload-btn').onclick = () => {
+        const file = document.getElementById('image-file').files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = e => updateDoc(doc(db, "students", currentUser), { image: e.target.result });
+        reader.readAsDataURL(file);
+    };
+</script>
+</body>
+</html>
